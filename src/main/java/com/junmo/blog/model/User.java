@@ -31,7 +31,7 @@ public class User {
 	@Id //PK
 	@GeneratedValue(strategy =GenerationType.IDENTITY) //프로젝트에서 연결된 DB(오라클,MYSQL)의 넘버링전략을 따라감.
 	//자동입력
-	private int id; //시퀀스 , auto_increment
+	private Integer id; //시퀀스 , auto_increment
 	
 	@Column(nullable=false,length=30)
 	private String username; //아이디

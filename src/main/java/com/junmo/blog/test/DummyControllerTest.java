@@ -1,24 +1,19 @@
 package com.junmo.blog.test;
 
-import java.util.List;
-import java.util.function.Supplier;
-
+import com.junmo.blog.model.RoleType;
+import com.junmo.blog.model.User;
+import com.junmo.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.junmo.blog.model.RoleType;
-import com.junmo.blog.model.User;
-import com.junmo.blog.repository.UserRepository;
+import java.util.List;
+import java.util.function.Supplier;
 
 //html이 아닌 data를 리턴해주는 controller=RestController
 @RestController
@@ -26,11 +21,24 @@ public class DummyControllerTest {
 	
 	@Autowired //의존성 주입 (DI)
 	private UserRepository userRepository;
-	
+
 	//save 함수는 id를 전달하지 않거나 해당 id에 대한 데이터가 없으면 insert를 해주고
 	//save 함수는 id를 전달하면 해당 id에 대한 데이터가 있으면 update를 함
+
+	@DeleteMapping("/dummy/user/{id}")
+	public String delete(@PathVariable int id){
+		try {
+			userRepository.deleteById(id);
+		}catch(EmptyResultDataAccessException e){
+
+			return "삭제에 실패하였습니다."+id;
+		}
+		return "삭제되었습니다.id"+id;
+	}
+
+
+
 	// http://localhost:8000/blog/dummy/user/{id}
-	
 	@Transactional
 	@PutMapping("/dummy/user/{id}")
 	public User updateUser(@PathVariable int id, @RequestBody User requestUser) {
@@ -51,7 +59,7 @@ public class DummyControllerTest {
 		
 		//더티 체킹
 		//2월 18일
-		return null;
+		return user;
 	}
 	
 	// http://localhost:8000/blog/dummy/users
